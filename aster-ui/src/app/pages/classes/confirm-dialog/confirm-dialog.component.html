@@ -1,0 +1,39 @@
+<div class="p-6 space-y-6 max-w-md">
+  <!-- Dialog Header -->
+  <div class="flex items-start space-x-4">
+    <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center flex-shrink-0 shadow-lg">
+      <span class="material-icons text-2xl">warning_amber</span>
+    </div>
+    
+    <div>
+      <h2 class="text-lg font-bold text-white tracking-tight font-heading">{{ data.title }}</h2>
+      <p class="text-xs text-slate-400 mt-1">This action is permanent and will permanently erase the course data.</p>
+    </div>
+  </div>
+
+  <!-- Dialog Body Content -->
+  <div class="p-4 bg-aster-input rounded-xl border border-aster-theme space-y-2">
+    <p class="text-xs text-slate-300 leading-relaxed">
+      Are you sure you want to delete course <strong class="text-white font-bold">"{{ data.courseName }}"</strong>?
+    </p>
+    <p class="text-[11px] text-slate-400 italic">
+      All assignments, parsed syllabus dumps, and scheduled calendar entries linked to this course will be deleted.
+    </p>
+  </div>
+
+  <!-- Dialog Action Buttons -->
+  <div class="flex items-center justify-end space-x-3 pt-2">
+    <button (click)="onCancel()"
+            type="button"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-aster-input hover:bg-white/5 border border-aster-theme transition-colors">
+      Cancel
+    </button>
+
+    <button (click)="onConfirm()"
+            type="button"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all flex items-center space-x-1.5">
+      <span class="material-icons text-sm">delete</span>
+      <span>Delete Course</span>
+    </button>
+  </div>
+</div>

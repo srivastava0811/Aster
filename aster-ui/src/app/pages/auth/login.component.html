@@ -1,0 +1,75 @@
+<div class="min-h-screen bg-[#090D16] flex items-center justify-center p-4 relative overflow-hidden">
+  
+  <!-- Subtle Ambient Glows -->
+  <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-900/30 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+  <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-teal-900/30 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+
+  <div class="w-full max-w-md bg-[#131C2E]/90 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-slate-800 space-y-6 relative z-10">
+    
+    <!-- Header Logo & Title -->
+    <div class="text-center space-y-2">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#6366F1] to-[#14B8A6] mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-xl shadow-indigo-500/25">
+        A
+      </div>
+      <h1 class="text-2xl font-bold text-white tracking-tight font-heading">
+        {{ isRegistering ? 'Create Student Account' : 'Welcome back to Aster' }}
+      </h1>
+      <p class="text-xs text-slate-400 font-medium">
+        {{ isRegistering ? 'Sign up to manage courses & parse syllabus dumps with AI' : 'Sign in to access your distraction-free academic workspace' }}
+      </p>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="errorMessage" class="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+      <span class="material-icons text-base">error_outline</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Auth Form -->
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+          Student Email Address
+        </label>
+        <input type="email"
+               [(ngModel)]="email"
+               name="email"
+               required
+               placeholder="student@university.edu"
+               class="w-full px-4 py-3 rounded-xl bg-[#0F172A] border border-slate-700 focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none transition-all" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+          Password
+        </label>
+        <input type="password"
+               [(ngModel)]="password"
+               name="password"
+               required
+               placeholder="••••••••"
+               class="w-full px-4 py-3 rounded-xl bg-[#0F172A] border border-slate-700 focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 text-sm font-medium text-white placeholder:text-slate-500 focus:outline-none transition-all" />
+      </div>
+
+      <button type="submit"
+              [disabled]="!email.trim() || !password || isLoading"
+              class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center space-x-2">
+        <div *ngIf="isLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span *ngIf="!isLoading">{{ isRegistering ? 'Register Account' : 'Sign In to Workspace' }}</span>
+      </button>
+    </form>
+
+    <!-- Pre-filled Credentials Info Chip -->
+    <div class="p-3 bg-[#0F172A] border border-slate-800 rounded-xl text-[11px] text-slate-400 flex items-center justify-between">
+      <span>Demo Account:</span>
+      <span class="font-mono font-semibold text-indigo-400">student&#64;aster.edu / aster123</span>
+    </div>
+
+    <!-- Toggle Mode Link -->
+    <div class="text-center pt-2 border-t border-slate-800">
+      <button (click)="toggleMode()" type="button" class="text-xs text-indigo-400 hover:underline font-semibold">
+        {{ isRegistering ? 'Already have an account? Sign In' : "Don't have an account? Register Now" }}
+      </button>
+    </div>
+  </div>
+</div>

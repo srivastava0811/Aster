@@ -1,0 +1,79 @@
+<div class="space-y-8 animate-fadeIn">
+  <!-- Section Title -->
+  <div>
+    <h2 class="text-xl font-bold text-white font-heading">Notification & Smart Reminder Settings</h2>
+    <p class="text-xs text-slate-400 mt-1">Customize when and how Aster alerts you regarding upcoming academic assignment deadlines.</p>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="successMessage" class="p-3.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">check_circle_outline</span>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">error_outline</span>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Lead Time Dropdown Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Smart Lead-Time Reminders</h3>
+
+    <div>
+      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+        Default Alert Lead Time
+      </label>
+      
+      <select [(ngModel)]="leadTimeHours"
+              class="w-full max-w-md px-4 py-3 rounded-xl bg-aster-input border border-aster-theme text-white font-medium text-sm focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all">
+        <option *ngFor="let opt of reminderOptions" [value]="opt.hours">
+          {{ opt.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Assignment Focus Display Limit Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <div>
+      <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Assignment Focus Display</h3>
+      <p class="text-xs text-slate-500 mt-1">Set how many upcoming assignments are displayed in the Assignment Focus card on the Dashboard Calendar.</p>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <input type="number"
+             [(ngModel)]="assignmentFocusLimit"
+             [min]="1"
+             [max]="50"
+             class="w-24 px-4 py-3 rounded-xl bg-aster-input border border-aster-theme text-white font-bold text-sm text-center focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all" />
+      <span class="text-xs text-slate-400">assignments shown at a time</span>
+    </div>
+  </div>
+
+  <!-- Weekly Digest Email Toggle Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Email Digest & Summaries</h3>
+
+    <div class="flex items-center justify-between p-4 bg-aster-input rounded-xl border border-aster-theme">
+      <div>
+        <h4 class="text-sm font-bold text-white">Weekly Academic Schedule Digest</h4>
+        <p class="text-xs text-slate-400 mt-0.5">Receive a Monday morning email summary outlining all assignments and exams scheduled for the coming week.</p>
+      </div>
+
+      <mat-slide-toggle [(ngModel)]="weeklyDigest" color="primary"></mat-slide-toggle>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="flex justify-end pt-2">
+    <button (click)="onSave()" 
+            [disabled]="isSaving"
+            type="button"
+            class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-50 text-white font-bold text-sm px-8 py-3 rounded-xl transition-all shadow-lg shadow-aster-dynamic flex items-center space-x-2">
+      <div *ngIf="isSaving" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      <span *ngIf="!isSaving" class="material-icons text-lg">save</span>
+      <span>Save Notification Settings</span>
+    </button>
+  </div>
+</div>

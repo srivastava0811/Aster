@@ -1,0 +1,113 @@
+<div class="p-6 max-h-[85vh] flex flex-col w-full bg-aster-card text-slate-100 rounded-2xl border border-aster-theme shadow-2xl overflow-hidden">
+  <!-- Dialog Header (Fixed top) -->
+  <div class="flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between border-b border-aster-theme pb-4 mb-4 gap-3">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-aster-dynamic-light text-aster-dynamic border border-aster-dynamic flex items-center justify-center font-bold flex-shrink-0">
+        <span class="material-icons text-xl">fact_check</span>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white font-heading flex items-center gap-2">
+          <span>Validate & Inject Syllabus Events</span>
+          <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-aster-dynamic-light text-aster-dynamic border border-aster-dynamic">
+            {{ items.length }} Extracted
+          </span>
+        </h2>
+        <p class="text-xs text-slate-400">Review, edit titles or dates, and toggle tasks before committing to your academic schedule.</p>
+      </div>
+    </div>
+
+    <!-- Course Target Chip -->
+    <div class="flex items-center space-x-2 bg-aster-input px-3 py-1.5 rounded-xl border border-aster-theme h-fit">
+      <span class="w-3 h-3 rounded-full flex-shrink-0" [style.backgroundColor]="data.course.colorCode"></span>
+      <span class="text-xs font-bold text-slate-200 truncate max-w-[160px]">{{ data.course.name }}</span>
+    </div>
+  </div>
+
+  <!-- Select All & Summary Toolbar (Fixed) -->
+  <div class="flex-shrink-0 flex items-center justify-between text-xs text-slate-400 bg-aster-input px-4 py-2.5 rounded-xl border border-aster-theme mb-3">
+    <button (click)="toggleSelectAll()" type="button" class="hover:text-white font-semibold flex items-center space-x-2 transition-colors">
+      <span class="material-icons text-base text-aster-dynamic">
+        {{ allSelected ? 'check_box' : 'check_box_outline_blank' }}
+      </span>
+      <span>{{ allSelected ? 'Deselect All' : 'Select All Items' }}</span>
+    </button>
+
+    <span class="font-mono text-[11px]">
+      <strong class="text-white">{{ includedItemsCount }}</strong> of {{ items.length }} selected for insertion
+    </span>
+  </div>
+
+  <!-- Scrollable Extracted Items List (Middle Scrollable Area) -->
+  <div class="flex-1 overflow-y-auto min-h-0 space-y-3 pr-1.5 my-1">
+    <div *ngIf="items.length === 0" class="py-12 text-center text-slate-500 space-y-2">
+      <span class="material-icons text-3xl">event_busy</span>
+      <p class="text-xs font-medium">No valid items remaining. Click Discard to try re-pasting syllabus text.</p>
+    </div>
+
+    <div *ngFor="let item of items; let idx = index" 
+         [class.opacity-50]="!item.included"
+         class="p-4 rounded-xl bg-aster-input border border-aster-theme transition-all space-y-3 group hover:border-slate-600">
+      
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center space-x-3 flex-1">
+          <!-- Checkbox Toggle -->
+          <input type="checkbox" 
+                 [(ngModel)]="item.included" 
+                 class="w-4 h-4 rounded border-slate-700 bg-aster-card text-aster-dynamic focus:ring-aster-dynamic cursor-pointer" />
+          
+          <!-- Title Input -->
+          <input type="text"
+                 [(ngModel)]="item.title"
+                 placeholder="Assignment / Exam Title"
+                 [disabled]="!item.included"
+                 class="flex-1 px-3 py-1.5 rounded-lg bg-aster-card border border-aster-theme text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all disabled:cursor-not-allowed" />
+        </div>
+
+        <!-- Confidence Badge -->
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border" [ngClass]="getConfidenceBadge(item.confidenceScore).class">
+          {{ getConfidenceBadge(item.confidenceScore).label }}
+        </span>
+
+        <!-- Remove Item Button -->
+        <button (click)="removeItem(idx)" 
+                type="button" 
+                title="Remove item from batch" 
+                class="text-slate-500 hover:text-rose-400 transition-colors p-1 rounded hover:bg-rose-500/10">
+          <span class="material-icons text-base">delete_outline</span>
+        </button>
+      </div>
+
+      <!-- Date & Context Row -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pl-7 text-xs">
+        <div class="flex items-center space-x-2 flex-1 max-w-sm">
+          <span class="text-slate-400 font-medium">Due Date & Time:</span>
+          <input type="datetime-local"
+                 [(ngModel)]="item.dueDate"
+                 [disabled]="!item.included"
+                 class="flex-1 px-3 py-1 rounded-lg bg-aster-card border border-aster-theme text-xs font-mono text-white focus:outline-none focus:ring-2 focus:ring-aster-dynamic color-scheme-dark disabled:cursor-not-allowed" />
+        </div>
+
+        <span *ngIf="item.extractedNotes" class="text-[11px] text-slate-400 italic truncate max-w-xs" [title]="item.extractedNotes">
+          "{{ item.extractedNotes }}"
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions Button Footer Bar (Permanently Fixed Bottom) -->
+  <div class="flex-shrink-0 pt-4 mt-3 border-t border-aster-theme flex items-center justify-between gap-3">
+    <button (click)="onCancel()" 
+            type="button" 
+            class="px-4 py-2.5 text-xs font-semibold text-slate-400 hover:text-white border border-aster-theme hover:bg-white/5 rounded-xl transition-colors">
+      Discard / Cancel
+    </button>
+
+    <button (click)="onConfirm()"
+            [disabled]="includedItemsCount === 0"
+            type="button"
+            class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-40 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-lg shadow-aster-dynamic transition-all flex items-center space-x-2 cursor-pointer">
+      <span class="material-icons text-base">calendar_month</span>
+      <span>Inject {{ includedItemsCount > 1 ? includedItemsCount + ' Assignments' : 'Assignment' }} into Calendar</span>
+    </button>
+  </div>
+</div>

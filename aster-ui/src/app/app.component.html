@@ -1,0 +1,13 @@
+<div *ngIf="!authService.isLoggedIn || isAuthPage" class="min-h-screen bg-slate-900">
+  <router-outlet></router-outlet>
+</div>
+
+<div *ngIf="authService.isLoggedIn && !isAuthPage" class="flex h-screen bg-aster-bg overflow-hidden">
+  <!-- Sidebar Navigation Wrapper -->
+  <app-sidebar-navigation></app-sidebar-navigation>
+
+  <!-- Main Content Area Wrapper -->
+  <main class="flex-1 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>

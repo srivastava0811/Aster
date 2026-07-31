@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+::ng-deep .fc .fc-event,
+::ng-deep .fc .fc-daygrid-event,
+::ng-deep .fc .fc-timegrid-event,
+::ng-deep .fc .fc-v-event {
+  width: fit-content !important;
+  max-width: 92% !important;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px 8px !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 9999px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 2px 4px !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+::ng-deep .fc .fc-daygrid-event-harness,
+::ng-deep .fc .fc-timegrid-event-harness {
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin: 1px 0 !important;
+}
+
+::ng-deep .fc-event-title,
+::ng-deep .fc-event-main,
+::ng-deep .fc-event-main-frame,
+::ng-deep .fc-event-title-container {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #FFFFFF !important;
+}
+
+::ng-deep .fc .fc-daygrid-event-dot {
+  display: none !important;
+}

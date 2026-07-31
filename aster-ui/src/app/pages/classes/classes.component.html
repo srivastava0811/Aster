@@ -1,0 +1,124 @@
+<div class="p-8 space-y-8 max-w-7xl mx-auto">
+  <!-- Page Header Card -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl">
+    <div>
+      <h1 class="text-2xl font-bold text-white tracking-tight font-heading flex items-center gap-2">
+        <span>Academic Courses</span>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-aster-dynamic-light text-aster-dynamic border border-aster-dynamic">
+          {{ courses.length }} {{ courses.length === 1 ? 'Course' : 'Courses' }}
+        </span>
+      </h1>
+      <p class="text-sm text-slate-400 mt-1">Manage your active semester classes, customize color tags, and inject syllabus content.</p>
+    </div>
+  </div>
+
+  <!-- Create Course Bar Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Add New Academic Course</h2>
+    
+    <form (ngSubmit)="createCourse()" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+      <div class="flex-1">
+        <input type="text" 
+               [(ngModel)]="newCourseName" 
+               name="courseName"
+               placeholder="e.g., CS 301: Algorithms & Data Structures"
+               required
+               class="w-full px-4 py-2.5 rounded-xl bg-aster-input border border-aster-theme text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-aster-dynamic text-sm font-medium transition-all" />
+      </div>
+
+      <!-- Color Swatch & Custom Picker Selection -->
+      <div class="flex items-center space-x-2 bg-aster-input p-2 rounded-xl border border-aster-theme">
+        <span class="text-xs font-semibold text-slate-400 mr-1">Color:</span>
+        <button *ngFor="let color of presetColors"
+                type="button"
+                (click)="selectedColor = color"
+                [style.backgroundColor]="color"
+                class="w-6 h-6 rounded-full transition-transform focus:outline-none flex items-center justify-center"
+                [class.scale-125]="selectedColor === color"
+                [class.ring-2]="selectedColor === color"
+                [class.ring-white]="selectedColor === color">
+          <span *ngIf="selectedColor === color" class="material-icons text-xs text-white">check</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="h-4 w-px bg-slate-700 mx-1"></div>
+
+        <!-- Custom Color Picker Swatch Input -->
+        <label class="relative w-6 h-6 rounded-full overflow-hidden border border-slate-600 shadow cursor-pointer flex items-center justify-center transition-transform hover:scale-110"
+               [style.backgroundColor]="isCustomColor ? selectedColor : 'transparent'"
+               [title]="'Custom color picker: ' + selectedColor">
+          <input type="color" 
+                 [(ngModel)]="selectedColor" 
+                 name="customColorPicker"
+                 class="absolute -top-4 -left-4 w-14 h-14 cursor-pointer opacity-0" />
+          <span *ngIf="!isCustomColor" class="material-icons text-[13px] text-slate-300">colorize</span>
+          <span *ngIf="isCustomColor" class="material-icons text-xs text-white">check</span>
+        </label>
+      </div>
+
+      <button type="submit" 
+              [disabled]="!newCourseName.trim()"
+              class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-50 text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-aster-dynamic flex items-center justify-center space-x-2">
+        <span class="material-icons text-base">add</span>
+        <span>Add Course</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Course Management Grid -->
+  <div class="space-y-4">
+    <h2 class="text-lg font-bold text-white font-heading">Current Courses Grid</h2>
+
+    <div *ngIf="isLoading" class="py-12 flex justify-center">
+      <div class="w-8 h-8 border-4 border-aster-dynamic border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Empty State Card -->
+    <div *ngIf="!isLoading && courses.length === 0" class="bg-aster-card p-12 rounded-2xl border border-aster-theme text-center space-y-3">
+      <div class="w-12 h-12 rounded-full bg-aster-input text-slate-400 mx-auto flex items-center justify-center">
+        <span class="material-icons text-2xl">school</span>
+      </div>
+      <h3 class="text-base font-bold text-slate-200">No Courses Added Yet</h3>
+      <p class="text-xs text-slate-500 max-w-md mx-auto">Add your enrolled classes above to organize syllabus text dumps into validated calendar events.</p>
+    </div>
+
+    <!-- Individual Course Cards -->
+    <div *ngIf="!isLoading && courses.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let course of courses" 
+           class="bg-aster-card rounded-2xl border border-aster-theme p-6 shadow-xl hover:border-slate-600 transition-all flex flex-col justify-between space-y-6 group">
+        
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded-full shadow-sm" [style.backgroundColor]="course.colorCode"></span>
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Course ID</span>
+            </div>
+            
+            <button (click)="deleteCourse(course.id, course.name)" 
+                    title="Delete course" 
+                    class="text-slate-600 hover:text-rose-400 transition-colors p-1 rounded hover:bg-rose-500/10">
+              <span class="material-icons text-base">delete_outline</span>
+            </button>
+          </div>
+
+          <h3 class="text-lg font-bold text-white group-hover:text-aster-dynamic transition-colors leading-snug">
+            {{ course.name }}
+          </h3>
+          <p class="text-xs text-slate-400 mt-2 font-medium">
+            {{ course.assignmentCount || 0 }} {{ course.assignmentCount === 1 ? 'assignment' : 'assignments' }} scheduled
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-aster-theme flex items-center justify-between">
+          <span class="text-[11px] text-slate-500">Ready for syllabus dump</span>
+
+          <a [routerLink]="['/classes', course.id, 'inject']"
+             class="inline-flex items-center space-x-1.5 text-xs font-bold text-aster-dynamic bg-aster-dynamic-light hover:bg-aster-dynamic-light px-3.5 py-2 rounded-xl transition-colors border border-aster-dynamic">
+            <span class="material-icons text-sm">auto_awesome</span>
+            <span>Inject Syllabus</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

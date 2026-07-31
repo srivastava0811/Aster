@@ -1,0 +1,77 @@
+<div class="space-y-8 animate-fadeIn">
+  <!-- Section Title -->
+  <div>
+    <h2 class="text-xl font-bold text-white font-heading">Academic Term & Semester Preferences</h2>
+    <p class="text-xs text-slate-400 mt-1">Configure your active academic term duration and course archiving rules.</p>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="successMessage" class="p-3.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">check_circle_outline</span>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">error_outline</span>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Semester Dates Form Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-6">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Semester Start & End Boundaries</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Semester Start Date Box -->
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+          Semester Start Date
+        </label>
+        <div class="relative">
+          <input type="date" 
+                 [(ngModel)]="startDateStr"
+                 class="w-full px-4 py-3 rounded-xl bg-aster-input border border-aster-theme text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-aster-dynamic focus:border-aster-dynamic transition-all color-scheme-dark" />
+        </div>
+        <p class="text-[11px] text-slate-500 mt-1.5">Marks the beginning of your academic term for course filtering.</p>
+      </div>
+
+      <!-- Semester End Date Box -->
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+          Semester End Date
+        </label>
+        <div class="relative">
+          <input type="date" 
+                 [(ngModel)]="endDateStr"
+                 class="w-full px-4 py-3 rounded-xl bg-aster-input border border-aster-theme text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-aster-dynamic focus:border-aster-dynamic transition-all color-scheme-dark" />
+        </div>
+        <p class="text-[11px] text-slate-500 mt-1.5">Marks final exam week and the official end of the term.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Archiving Option Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Course Archiving Rules</h3>
+
+    <div class="flex items-center justify-between p-4 bg-aster-input rounded-xl border border-aster-theme">
+      <div>
+        <h4 class="text-sm font-bold text-white">Auto-Archive Past Term Courses</h4>
+        <p class="text-xs text-slate-400 mt-0.5">Automatically hide courses and completed assignments from prior semesters from the active sidebar menu.</p>
+      </div>
+
+      <mat-slide-toggle [(ngModel)]="archivePastCourses" color="primary"></mat-slide-toggle>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="flex justify-end pt-2">
+    <button (click)="onSave()" 
+            [disabled]="isSaving"
+            type="button"
+            class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-50 text-white font-bold text-sm px-8 py-3 rounded-xl transition-all shadow-lg shadow-aster-dynamic flex items-center space-x-2">
+      <div *ngIf="isSaving" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      <span *ngIf="!isSaving" class="material-icons text-lg">save</span>
+      <span>Save Academic Preferences</span>
+    </button>
+  </div>
+</div>

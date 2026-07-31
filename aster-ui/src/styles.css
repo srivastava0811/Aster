@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --aster-primary: #6366F1;
+  --aster-primary-hover: #4F46E5;
+  --aster-primary-rgb: 99, 102, 241;
+  --aster-primary-light: rgba(99, 102, 241, 0.15);
+  --aster-primary-glow: rgba(99, 102, 241, 0.35);
+
+  --aster-bg: #090D16;
+  --aster-card-bg: #131C2E;
+  --aster-sidebar-bg: #131C2E;
+  --aster-input-bg: #0F172A;
+  --aster-border: #1E293B;
+  --aster-border-light: #334155;
+}
+
+@layer base {
+  body {
+    background-color: var(--aster-bg);
+    color: #F8FAFC;
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.25s ease-in-out;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom dark scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--aster-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--aster-border-light);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Global Theme Dynamic Utility Classes */
+.bg-aster-bg {
+  background-color: var(--aster-bg) !important;
+}
+.bg-aster-card {
+  background-color: var(--aster-card-bg) !important;
+}
+.bg-aster-sidebar {
+  background-color: var(--aster-sidebar-bg) !important;
+}
+.bg-aster-input {
+  background-color: var(--aster-input-bg) !important;
+}
+.border-aster-theme {
+  border-color: var(--aster-border) !important;
+}
+.bg-aster-dynamic {
+  background-color: var(--aster-primary) !important;
+}
+.bg-aster-dynamic:hover {
+  background-color: var(--aster-primary-hover) !important;
+}
+.bg-aster-dynamic-light {
+  background-color: var(--aster-primary-light) !important;
+}
+.text-aster-dynamic {
+  color: var(--aster-primary) !important;
+}
+.border-aster-dynamic {
+  border-color: var(--aster-primary) !important;
+}
+.shadow-aster-dynamic {
+  box-shadow: 0 10px 25px -5px var(--aster-primary-glow) !important;
+}
+
+/* ==========================================
+   FullCalendar Premium Dark Theme & Controls
+   ========================================== */
+.fc {
+  font-family: 'Inter', sans-serif !important;
+  --fc-border-color: var(--aster-border) !important;
+  --fc-today-bg-color: transparent !important;
+  --fc-page-bg-color: var(--aster-card-bg) !important;
+  --fc-neutral-bg-color: var(--aster-input-bg) !important;
+  --fc-highlight-color: var(--aster-primary-light) !important;
+}
+
+/* Toolbar Header Layout */
+.fc .fc-toolbar {
+  margin-bottom: 1.5rem !important;
+  gap: 1rem !important;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: #F8FAFC !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Button Container Groups */
+.fc .fc-button-group {
+  background-color: var(--aster-input-bg) !important;
+  border: 1px solid var(--aster-border) !important;
+  border-radius: 0.75rem !important;
+  padding: 3px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Individual Toolbar Buttons */
+.fc .fc-button {
+  background-color: transparent !important;
+  border: none !important;
+  color: #94A3B8 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.45rem 0.85rem !important;
+  margin: 0 1px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: none !important;
+  text-transform: capitalize !important;
+  outline: none !important;
+}
+
+.fc .fc-button:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #F8FAFC !important;
+}
+
+.fc .fc-button:focus, 
+.fc .fc-button-primary:focus {
+  box-shadow: 0 0 0 2px var(--aster-primary-glow) !important;
+}
+
+/* Active Selected View Button */
+.fc .fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background: var(--aster-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px -2px var(--aster-primary-glow) !important;
+  transform: scale(1.02);
+}
+
+/* Distinctive "Today" Button */
+.fc .fc-today-button {
+  background-color: var(--aster-primary-light) !important;
+  border: 1px solid var(--aster-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  border-radius: 0.625rem !important;
+  padding: 0.45rem 1rem !important;
+  margin-left: 0.5rem !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.fc .fc-today-button:hover:not(:disabled) {
+  background-color: var(--aster-primary-hover) !important;
+  border-color: var(--aster-primary-hover) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 12px var(--aster-primary-glow) !important;
+}
+
+.fc .fc-today-button:disabled {
+  opacity: 0.5 !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border-color: var(--aster-border) !important;
+  color: #64748B !important;
+}
+
+/* Column Header (Mon, Tue, Wed...) */
+.fc .fc-col-header-cell {
+  background-color: var(--aster-input-bg) !important;
+  border-bottom: 1px solid var(--aster-border) !important;
+  padding: 8px 0 !important;
+}
+
+.fc .fc-col-header-cell.fc-day-today {
+  background-color: var(--aster-primary-light) !important;
+  border-bottom: 2px solid var(--aster-primary) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-size: 0.725rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: #64748B !important;
+  text-decoration: none !important;
+}
+
+.fc .fc-col-header-cell.fc-day-today .fc-col-header-cell-cushion {
+  color: #FFFFFF !important;
+}
+
+/* Day Numbers */
+.fc .fc-daygrid-day-number {
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  color: #CBD5E1 !important;
+  padding: 8px 10px !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+}
+
+.fc .fc-daygrid-day:hover .fc-daygrid-day-number {
+  color: var(--aster-primary) !important;
+}
+
+/* Compact Pill Badges (Fits Content & Ultra-Clean Finish - Synced across Month & Week views) */
+.fc .fc-event,
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event,
+.fc .fc-v-event {
+  border-radius: 9999px !important;
+  padding: 2px 8px !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: fit-content !important;
+  max-width: 92% !important;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 2px 4px !important;
+}
+
+.fc .fc-daygrid-event-harness,
+.fc .fc-timegrid-event-harness {
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin: 1px 0 !important;
+}
+
+.fc .fc-event-main,
+.fc .fc-event-title,
+.fc .fc-event-main-frame,
+.fc .fc-event-title-container,
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #FFFFFF !important;
+}
+
+.fc .fc-daygrid-event-dot {
+  display: none !important;
+}
+
+.fc .fc-event:hover {
+  transform: scale(1.04) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Enlarged Hourly Grid Time Slots for Clean & Spacious Finish */
+.fc .fc-timegrid-slot {
+  height: 56px !important;
+}
+
+.fc .fc-timegrid-slot-label {
+  vertical-align: middle !important;
+}
+
+/* Angular Material Dialog Dark Backdrop & Modal Container Overrides */
+.cdk-overlay-dark-backdrop {
+  background: rgba(2, 6, 23, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--aster-card-bg) !important;
+  color: #F8FAFC !important;
+  border-radius: 1rem !important;
+  border: 1px solid var(--aster-border) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.mat-mdc-dialog-content {
+  max-height: none !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}

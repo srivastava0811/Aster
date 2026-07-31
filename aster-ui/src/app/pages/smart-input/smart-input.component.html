@@ -1,0 +1,85 @@
+<div class="p-8 space-y-6 max-w-4xl mx-auto">
+  <!-- Page Navigation Header -->
+  <div class="flex items-center space-x-3 text-xs font-semibold text-slate-500">
+    <a routerLink="/classes" class="hover:text-aster-dynamic transition-colors">Courses</a>
+    <span>/</span>
+    <span class="text-slate-300 font-bold">{{ course?.name || 'Class Workspace' }}</span>
+    <span>/</span>
+    <span class="text-aster-dynamic font-bold">Inject Syllabus</span>
+  </div>
+
+  <!-- Main Banner Header Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center space-x-2.5 mb-1">
+        <span *ngIf="course" class="w-3.5 h-3.5 rounded-full" [style.backgroundColor]="course.colorCode"></span>
+        <h1 class="text-2xl font-bold text-white tracking-tight font-heading">
+          {{ course?.name || 'AI Syllabus Text Injector' }}
+        </h1>
+      </div>
+      <p class="text-sm text-slate-400">Paste raw, unstructured syllabus snippets or assignment lists. Aster AI parses them into structured calendar tasks requiring your validation.</p>
+    </div>
+
+    <a routerLink="/dashboard" class="text-xs font-semibold text-slate-300 bg-aster-input hover:bg-white/5 border border-aster-theme px-4 py-2 rounded-xl transition-colors">
+      View Calendar
+    </a>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">error_outline</span>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <div *ngIf="successMessage" class="p-4 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+    <span class="material-icons text-base">check_circle_outline</span>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <!-- Smart Input Textarea Workspace Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-6">
+    <div class="flex items-center justify-between">
+      <label class="text-sm font-bold text-white font-heading flex items-center space-x-2">
+        <span class="material-icons text-aster-dynamic text-lg">auto_awesome</span>
+        <span>Raw Syllabus / Announcement Text Dump</span>
+      </label>
+      <span class="text-xs text-slate-500 font-mono">{{ rawText.length }} chars</span>
+    </div>
+
+    <textarea [(ngModel)]="rawText"
+              rows="8"
+              placeholder="Paste unstructured syllabus text here... (e.g. 'Data Structures Midterm Exam on October 24th at 2:00 PM worth 25% of grade', or paste multiple lines of course announcements)"
+              class="w-full p-4 rounded-xl bg-aster-input border border-aster-theme focus:ring-2 focus:ring-aster-dynamic text-sm font-body text-slate-100 focus:outline-none transition-all placeholder:text-slate-500 leading-relaxed shadow-inner">
+    </textarea>
+
+    <!-- Quick Example Chips -->
+    <div class="space-y-2">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Try quick sample text:</span>
+      <div class="flex flex-wrap gap-2">
+        <button *ngFor="let ex of presetExamples"
+                (click)="useExample(ex)"
+                type="button"
+                class="text-xs text-slate-300 bg-aster-input hover:bg-white/5 border border-aster-theme px-3 py-1.5 rounded-lg transition-colors text-left font-mono">
+          "{{ ex.length > 50 ? ex.substring(0, 48) + '...' : ex }}"
+        </button>
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="pt-4 border-t border-aster-theme flex items-center justify-between">
+      <div class="flex items-center space-x-2 text-xs text-slate-400">
+        <span class="material-icons text-sm text-amber-400">verified_user</span>
+        <span>Explicit user validation modal will pop up before any database commit.</span>
+      </div>
+
+      <button (click)="onParseAndInject()"
+              [disabled]="!rawText.trim() || isParsing || isSaving"
+              type="button"
+              class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-50 text-white font-bold text-sm px-8 py-3 rounded-xl transition-all shadow-lg shadow-aster-dynamic flex items-center space-x-2">
+        <div *ngIf="isParsing || isSaving" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span *ngIf="!isParsing && !isSaving" class="material-icons text-lg">psychology</span>
+        <span>{{ isParsing ? 'Parsing with AI...' : isSaving ? 'Saving...' : 'Extract & Validate Event' }}</span>
+      </button>
+    </div>
+  </div>
+</div>

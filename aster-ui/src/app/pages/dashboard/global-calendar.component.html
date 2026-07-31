@@ -1,0 +1,177 @@
+<div class="p-8 space-y-6 max-w-7xl mx-auto">
+  <!-- Page Header Card -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl">
+    <div>
+      <h1 class="text-2xl font-bold text-white tracking-tight font-heading flex items-center gap-2">
+        <span>Academic Calendar</span>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-aster-dynamic-light text-aster-dynamic border border-aster-dynamic">Global View</span>
+      </h1>
+      <p class="text-sm text-slate-400 mt-1">Sleek, distraction-free view of all upcoming assignment deadlines and course milestones.</p>
+    </div>
+
+    <!-- Quick Legend & Panel Controls -->
+    <div class="flex items-center space-x-3 overflow-x-auto py-1">
+      <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Courses:</span>
+      <div *ngFor="let course of courses" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-aster-input border border-aster-theme">
+        <span class="w-2.5 h-2.5 rounded-full" [style.backgroundColor]="course.colorCode"></span>
+        <span class="text-xs font-medium text-slate-300 truncate max-w-[120px]">{{ course.name }}</span>
+      </div>
+
+      <!-- Focus Panel Toggle Button -->
+      <button (click)="toggleFocusCollapse()" 
+              [title]="isFocusCollapsed ? 'Show Assignment Focus' : 'Hide Assignment Focus'" 
+              class="flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-aster-input hover:bg-white/5 border border-aster-theme text-xs font-semibold text-slate-300 hover:text-white transition-all cursor-pointer ml-2 flex-shrink-0">
+        <span class="material-icons text-sm text-aster-dynamic">{{ isFocusCollapsed ? 'visibility' : 'visibility_off' }}</span>
+        <span>{{ isFocusCollapsed ? 'Show Focus' : 'Hide Focus' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Calendar Workspace Grid Cards -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div [ngClass]="isFocusCollapsed ? 'lg:col-span-4' : 'lg:col-span-3'" class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl relative min-h-[500px] transition-all duration-300">
+      
+      <!-- Uncollapse Assignment Focus Banner (Visible when Focus Panel is collapsed) -->
+      <div *ngIf="isFocusCollapsed" class="flex items-center justify-between mb-4 pb-3 border-b border-aster-theme">
+        <div class="flex items-center space-x-2 text-slate-400 text-xs">
+          <span class="material-icons text-sm text-amber-400">info</span>
+          <span>Assignment Focus panel is collapsed.</span>
+        </div>
+
+        <button (click)="toggleFocusCollapse()" 
+                class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-aster-dynamic-light text-aster-dynamic hover:bg-aster-dynamic hover:text-white border border-aster-dynamic transition-all text-xs font-bold cursor-pointer shadow-sm">
+          <span class="material-icons text-sm">assignment</span>
+          <span>Show Assignment Focus</span>
+          <span class="material-icons text-sm">chevron_left</span>
+        </button>
+      </div>
+      <div *ngIf="isLoading" class="absolute inset-0 bg-aster-card/90 backdrop-blur-sm z-10 flex items-center justify-center rounded-2xl">
+        <div class="flex flex-col items-center space-y-3">
+          <div class="w-8 h-8 border-4 border-aster-dynamic border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-xs font-medium text-slate-400">Loading academic schedule...</span>
+        </div>
+      </div>
+
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+
+    <!-- Right-hand Sidebar / Chronologically Ordered Assignment Focus Card -->
+    <div *ngIf="!isFocusCollapsed" class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-5 flex flex-col justify-between transition-all duration-300">
+      <div>
+        <div class="flex items-center justify-between border-b border-aster-theme pb-4 mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="material-icons text-base text-aster-dynamic">assignment</span>
+            <h2 class="text-base font-bold text-white font-heading">Assignment Focus</h2>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-aster-dynamic-light text-aster-dynamic border border-aster-dynamic">
+              {{ sortedAssignments.length }}
+            </span>
+            <button (click)="toggleFocusCollapse()" title="Collapse Assignment Focus" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+              <span class="material-icons text-sm">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Single Selected Assignment Focus Detail View -->
+        <div *ngIf="selectedAssignment" class="space-y-4 animate-fadeIn">
+          <div class="flex items-center space-x-2 truncate">
+            <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" [style.backgroundColor]="selectedAssignment.courseColorCode"></span>
+            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider truncate">{{ selectedAssignment.courseName }}</span>
+          </div>
+
+          <h3 class="text-lg font-bold text-white leading-snug tracking-tight">{{ selectedAssignment.title }}</h3>
+
+          <div class="bg-aster-input rounded-xl border border-aster-theme p-4 space-y-3 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-slate-500">Due Date:</span>
+              <span class="font-bold text-slate-200">{{ selectedAssignment.dueDate | date:'longDate' }}</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-slate-500">Due Time:</span>
+              <span class="font-bold text-slate-200">{{ selectedAssignment.dueDate | date:'shortTime' }}</span>
+            </div>
+          </div>
+
+          <div class="pt-2 space-y-2.5">
+            <!-- Top Row: Back & Delete -->
+            <div class="flex items-center justify-between gap-2.5">
+              <button (click)="closeDetails()"
+                      class="flex-1 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-aster-input hover:bg-white/5 border border-aster-theme transition-colors flex items-center justify-center space-x-1.5 cursor-pointer">
+                <span class="material-icons text-sm">arrow_back</span>
+                <span>Back</span>
+              </button>
+
+              <button (click)="deleteAssignment(selectedAssignment.id)"
+                      class="flex-1 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+                      title="Delete Assignment">
+                <span class="material-icons text-sm">delete</span>
+                <span>Delete</span>
+              </button>
+            </div>
+
+            <!-- Bottom Row: Full-width Mark Complete / Mark Incomplete -->
+            <button (click)="completeAssignment(selectedAssignment)"
+                    class="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+                    [ngClass]="selectedAssignment.isCompleted ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-600/20' : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20'">
+              <span class="material-icons text-sm">{{ selectedAssignment.isCompleted ? 'undo' : 'check_circle' }}</span>
+              <span>{{ selectedAssignment.isCompleted ? 'Mark as Incomplete' : 'Mark as Complete' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chronologically Sorted Upcoming Assignments List (Closest Due Date at Top) -->
+        <div *ngIf="!selectedAssignment" class="space-y-3">
+          <div *ngIf="sortedAssignments.length === 0" class="py-12 text-center text-slate-500 space-y-2">
+            <span class="material-icons text-4xl text-slate-600">event_available</span>
+            <p class="text-xs font-medium">No upcoming assignments scheduled.</p>
+          </div>
+
+          <div *ngIf="sortedAssignments.length > 0"
+               [ngClass]="assignmentFocusLimit > 5 ? 'max-h-[460px] overflow-y-auto pr-1' : 'max-h-none overflow-y-visible'"
+               class="space-y-2.5">
+            <div *ngFor="let item of sortedAssignments; let idx = index"
+                 (click)="selectAssignment(item)"
+                 class="p-3.5 rounded-xl bg-aster-input border border-aster-theme hover:border-slate-600 transition-all cursor-pointer space-y-1.5 group">
+              
+              <!-- Next Up Badge on top of the course name -->
+              <div *ngIf="idx === 0" class="flex pb-1">
+                <span class="text-[9px] font-extrabold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-500/30 px-2.5 py-0.5 rounded-md flex items-center space-x-1 select-none">
+                  <span class="material-icons text-[10px]">hourglass_empty</span>
+                  <span>Next Up</span>
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-2 truncate">
+                  <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" [style.backgroundColor]="item.courseColorCode"></span>
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider truncate">{{ item.courseName }}</span>
+                </div>
+
+                <label class="flex items-center space-x-1 cursor-pointer text-slate-400 hover:text-emerald-400 transition-colors select-none"
+                       (click)="$event.stopPropagation()"
+                       [title]="item.isCompleted ? 'Mark as incomplete' : 'Mark as completed'">
+                  <input type="checkbox"
+                         [checked]="item.isCompleted"
+                         (change)="completeAssignment(item, $event)"
+                         class="w-4 h-4 rounded border-slate-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 bg-aster-card cursor-pointer transition-all" />
+                </label>
+              </div>
+
+              <h4 class="text-sm font-bold text-slate-200 group-hover:text-white transition-colors leading-snug line-clamp-2">
+                {{ item.title }}
+              </h4>
+
+              <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                <span class="font-mono text-slate-400">{{ item.dueDate | date:'shortDate' }}</span>
+                <span class="font-semibold text-aster-dynamic">{{ item.dueDate | date:'shortTime' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="space-y-8 animate-fadeIn">
+  <!-- Section Title -->
+  <div>
+    <h2 class="text-xl font-bold text-white font-heading">Account & Security Settings</h2>
+    <p class="text-xs text-slate-400 mt-1">Manage your account email address, password security, and export academic backup files.</p>
+  </div>
+
+  <!-- Profile Email Info Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Account Credentials</h3>
+    
+    <div>
+      <label class="block text-xs font-semibold text-slate-400 mb-1.5">Registered Student Email</label>
+      <input type="email" 
+             [value]="settings?.email || ''" 
+             disabled 
+             class="w-full max-w-md px-4 py-2.5 rounded-xl bg-aster-input border border-aster-theme text-slate-400 text-sm font-mono cursor-not-allowed" />
+    </div>
+  </div>
+
+  <!-- Password Reset Form Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-6">
+    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Change Security Password</h3>
+
+    <div *ngIf="passwordSuccessMessage" class="p-3.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+      <span class="material-icons text-base">check_circle_outline</span>
+      <span>{{ passwordSuccessMessage }}</span>
+    </div>
+
+    <div *ngIf="passwordErrorMessage" class="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+      <span class="material-icons text-base">error_outline</span>
+      <span>{{ passwordErrorMessage }}</span>
+    </div>
+
+    <form (ngSubmit)="onUpdatePassword()" class="space-y-4 max-w-md">
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Current Password</label>
+        <input type="password" 
+               [(ngModel)]="currentPassword" 
+               name="currentPassword"
+               required
+               placeholder="••••••••" 
+               class="w-full px-4 py-2.5 rounded-xl bg-aster-input border border-aster-theme text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">New Password</label>
+        <input type="password" 
+               [(ngModel)]="newPassword" 
+               name="newPassword"
+               required
+               placeholder="••••••••" 
+               class="w-full px-4 py-2.5 rounded-xl bg-aster-input border border-aster-theme text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all" />
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+        <input type="password" 
+               [(ngModel)]="confirmPassword" 
+               name="confirmPassword"
+               required
+               placeholder="••••••••" 
+               class="w-full px-4 py-2.5 rounded-xl bg-aster-input border border-aster-theme text-white placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-aster-dynamic transition-all" />
+      </div>
+
+      <button type="submit" 
+              [disabled]="!currentPassword || !newPassword || !confirmPassword || isUpdatingPassword"
+              class="bg-aster-dynamic hover:bg-aster-dynamic-hover disabled:opacity-50 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition-all shadow-lg shadow-aster-dynamic flex items-center space-x-2">
+        <div *ngIf="isUpdatingPassword" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span *ngIf="!isUpdatingPassword" class="material-icons text-sm">lock_reset</span>
+        <span>Update Password</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Data Export Section Card -->
+  <div class="bg-aster-card p-6 rounded-2xl border border-aster-theme shadow-xl space-y-4">
+    <div>
+      <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Export Academic Backup Data</h3>
+      <p class="text-xs text-slate-400 mt-1">Download a full JSON archive containing all your enrolled courses, syllabus dumps, and scheduled calendar tasks.</p>
+    </div>
+
+    <div *ngIf="exportSuccessMessage" class="p-3.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl text-xs font-semibold flex items-center space-x-2">
+      <span class="material-icons text-base">check_circle_outline</span>
+      <span>{{ exportSuccessMessage }}</span>
+    </div>
+
+    <div class="flex items-center space-x-4 pt-2">
+      <button (click)="onExportData()" 
+              [disabled]="isExporting"
+              type="button"
+              class="bg-aster-input hover:bg-white/5 text-white font-semibold text-xs px-5 py-2.5 rounded-xl border border-aster-theme transition-all flex items-center space-x-2">
+        <div *ngIf="isExporting" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span *ngIf="!isExporting" class="material-icons text-sm text-aster-dynamic">download</span>
+        <span>Export as JSON</span>
+      </button>
+
+      <span class="text-xs text-slate-500">Includes user preferences, courses & assignment data</span>
+    </div>
+  </div>
+</div>
