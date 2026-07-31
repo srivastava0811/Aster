@@ -1,0 +1,21 @@
+# .NET build artifacts
+Aster.Api/bin/
+Aster.Api/obj/
+
+# User secrets & local config
+Aster.Api/appsettings.Development.json
+
+# Angular build output and cache
+aster-ui/dist/
+aster-ui/.angular/
+
+# Node modules
+aster-ui/node_modules/
+
+# IDE / OS
+.vs/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
